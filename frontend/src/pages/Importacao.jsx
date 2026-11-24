@@ -7,8 +7,26 @@ const ARQUIVOS = [
   { campo: 'pagamentos', nome: 'pagamentos.json', descricao: 'Eventos de pagamento enviados pelo tribunal', obrigatorio: true },
   { campo: 'tribunal', nome: 'tribunal.csv', descricao: 'Lista de precatórios do tribunal', obrigatorio: true },
   { campo: 'hub', nome: 'hub.csv', descricao: 'Exportação do nosso sistema', obrigatorio: true },
-  { campo: 'apresentacoes', nome: 'apresentacoes.json', descricao: 'Datas de apresentação (opcional)', obrigatorio: false },
+  { campo: 'apresentacoes', nome: 'apresentacoes.json', descricao: 'Datas de apresentação dos precatórios', obrigatorio: false },
 ]
+
+function IconeArquivo() {
+  return (
+    <svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="currentColor" strokeWidth="1.8"
+      strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 4h11l6 6v20H9z" /><path d="M20 4v6h6" /><path d="M17.5 25v-9m-3.5 3.5 3.5-3.5 3.5 3.5" />
+    </svg>
+  )
+}
+
+function IconeOk() {
+  return (
+    <svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="currentColor" strokeWidth="2.2"
+      strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="17" cy="17" r="12" /><path d="m11.5 17.5 3.8 3.8 7.2-7.6" />
+    </svg>
+  )
+}
 
 function ZonaArquivo({ config, arquivo, erro, onEscolher }) {
   const [arrastando, setArrastando] = useState(false)
@@ -19,7 +37,7 @@ function ZonaArquivo({ config, arquivo, erro, onEscolher }) {
       onDragLeave={() => setArrastando(false)}
       onDrop={(e) => { e.preventDefault(); setArrastando(false); onEscolher(e.dataTransfer.files[0]) }}>
       <label htmlFor={id} className="zona__rotulo">
-        <span className="zona__icone" aria-hidden="true">{arquivo ? '✓' : '⇪'}</span>
+        <span className="zona__icone" aria-hidden="true">{arquivo ? <IconeOk /> : <IconeArquivo />}</span>
         <strong>{config.nome}</strong>{!config.obrigatorio && <span className="texto-suave"> (opcional)</span>}
         <span className="texto-suave texto-pequeno">{config.descricao}</span>
         {arquivo
@@ -33,7 +51,7 @@ function ZonaArquivo({ config, arquivo, erro, onEscolher }) {
   )
 }
 
-export default function Importacao({ onCriado }) {
+export default function Importacao({ nome, onCriado }) {
   const [arquivos, setArquivos] = useState({})
   const [erros, setErros] = useState({})
   const [erroGeral, setErroGeral] = useState('')
@@ -59,9 +77,9 @@ export default function Importacao({ onCriado }) {
 
   return (
     <section>
-      <h1>Importar arquivos</h1>
-      <p className="texto-suave">Envie os arquivos exatamente como chegaram. Eles não são alterados: tudo o que for
-        corrigido, descartado ou ficar em dúvida aparece com o motivo.</p>
+      <h1 className="titulo-pagina">Olá, {nome}. Quais arquivos chegaram?</h1>
+      <p className="texto-suave largura-leitura">Envie os arquivos exatamente como vieram do tribunal. Eles não são
+        alterados: tudo o que for corrigido, descartado ou ficar em dúvida aparece com o motivo.</p>
       <div className="grade-zonas">
         {ARQUIVOS.map((config) => (
           <ZonaArquivo key={config.campo} config={config} arquivo={arquivos[config.campo]} erro={erros[config.campo]}

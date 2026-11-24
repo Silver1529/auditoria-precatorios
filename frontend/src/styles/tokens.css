@@ -1,49 +1,53 @@
-/* Tokens: o tema escuro troca só estes valores. */
+/* Papel e tinta: o tema escuro troca só estes valores. */
 :root {
-  --fonte: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
-  --fonte-mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --fonte: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
-  --fundo: #f5f6f8;
-  --superficie: #ffffff;
-  --superficie-2: #eef0f4;
-  --texto: #1b2230;
-  --texto-suave: #5a6475;
-  --borda: #d5dae2;
-  --foco: #2563eb;
-  --primaria: #1d4ed8;
-  --primaria-texto: #ffffff;
+  --papel: #f5f6f2;        /* fundo, papel de ofício */
+  --folha: #ffffff;        /* superfícies */
+  --folha-2: #eceee7;      /* cabeçalhos de tabela, áreas de apoio */
+  --tinta: #18202e;        /* texto */
+  --tinta-suave: #556072;  /* texto de apoio */
+  --pauta: #d8dbd2;        /* linhas e bordas */
+  --caneta: #2541b2;       /* azul-caneta: ação principal e marca */
+  --caneta-forte: #1b318a;
+  --sobre-marca: #ffffff;
+  --foco: #2541b2;
 
-  /* cores semânticas (texto escuro sobre fundo claro = contraste AA) */
-  --ok: #166534;        --ok-fundo: #dcfce7;
-  --corrigido: #1e40af; --corrigido-fundo: #dbeafe;
-  --descartado: #4b5563; --descartado-fundo: #e5e7eb;
-  --pendente: #a84c06;  --pendente-fundo: #ffedd5;
-  --atencao: #854d0e;   --atencao-fundo: #fef9c3;
-  --erro: #b91c1c;      --erro-fundo: #fee2e2;
+  /* carimbos de status (texto escuro sobre fundo claro: contraste AA) */
+  --ok: #1e6b47;        --ok-fundo: #e1f1e7;
+  --corrigido: #2541b2; --corrigido-fundo: #e3e8fa;
+  --descartado: #5a6270; --descartado-fundo: #e8e9ec;
+  --pendente: #a84c06;  --pendente-fundo: #fbecd9;
+  --atencao: #7a5500;   --atencao-fundo: #fbf1c8;
+  --erro: #b3261e;      --erro-fundo: #fbe4e1;
 
-  --espaco-1: 4px; --espaco-2: 8px; --espaco-3: 12px; --espaco-4: 16px; --espaco-5: 24px; --espaco-6: 32px;
-  --raio: 8px; --raio-pequeno: 4px;
-  --sombra: 0 1px 2px rgb(0 0 0 / 6%), 0 2px 8px rgb(0 0 0 / 6%);
+  /* escala tipográfica 1,25 sobre 16px */
+  --t-1: .8rem; --t0: 1rem; --t1: 1.25rem; --t2: 1.563rem; --t3: 1.953rem; --t4: 2.441rem;
+  --espaco-1: 4px; --espaco-2: 8px; --espaco-3: 12px; --espaco-4: 16px; --espaco-5: 24px; --espaco-6: 40px; --espaco-7: 64px;
+  --raio: 10px; --raio-pequeno: 6px;
+  --sombra: 0 1px 0 rgb(24 32 46 / 6%), 0 6px 20px -12px rgb(24 32 46 / 25%);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --fundo: #0f141b;
-    --superficie: #171e28;
-    --superficie-2: #212a36;
-    --texto: #e6eaf0;
-    --texto-suave: #a3adbd;
-    --borda: #2f3a48;
-    --foco: #60a5fa;
-    --primaria: #3b82f6;
+    --papel: #12161d;
+    --folha: #1a2029;
+    --folha-2: #222935;
+    --tinta: #e8eaef;
+    --tinta-suave: #a3acbb;
+    --pauta: #2f3846;
+    --caneta: #8ea2f0;
+    --caneta-forte: #b3c0f6;
+    --sobre-marca: #12161d;
+    --foco: #8ea2f0;
 
-    --ok: #86efac;        --ok-fundo: #12321f;
-    --corrigido: #93c5fd; --corrigido-fundo: #172a4a;
-    --descartado: #cbd5e1; --descartado-fundo: #2a313b;
-    --pendente: #fdba74;  --pendente-fundo: #3b2414;
-    --atencao: #fde047;   --atencao-fundo: #3a3410;
-    --erro: #fca5a5;      --erro-fundo: #3f1a1a;
+    --ok: #8fd6ae;        --ok-fundo: #16301f;
+    --corrigido: #a9b8f5; --corrigido-fundo: #1d2748;
+    --descartado: #c4c9d2; --descartado-fundo: #2a303a;
+    --pendente: #f5b878;  --pendente-fundo: #3a2614;
+    --atencao: #f0d16b;   --atencao-fundo: #352d10;
+    --erro: #f4a29b;      --erro-fundo: #3d1c1a;
 
-    --sombra: 0 1px 2px rgb(0 0 0 / 40%);
+    --sombra: 0 1px 0 rgb(0 0 0 / 30%);
   }
 }

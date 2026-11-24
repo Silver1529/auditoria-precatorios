@@ -28,7 +28,7 @@ export default function Resultado({ loteId, resumo, onAtualizar }) {
     <section>
       <h2>Resumo dos pagamentos</h2>
       <div className="grade-resultado">
-        <div className="grade-cards">
+        <div className="faixa" role="list" aria-label="Contagem dos pagamentos">
           <CardContagem titulo="Analisados" valor={c.analisados} icone="∑" />
           <CardContagem titulo="OK" valor={c.validos} tom="ok" icone="✓" />
           <CardContagem titulo="Corrigidos" valor={c.corrigidos} tom="corrigido" icone="✎" />

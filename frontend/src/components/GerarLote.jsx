@@ -10,7 +10,10 @@ export default function GerarLote({ resumo, onGerar, gerando = false }) {
       </button>
       {bloqueado && (
         <div id="motivo-bloqueio" className="gerar-lote__motivo">
-          <p><strong>{resumo.motivo_bloqueio}.</strong> O botão libera quando todos os itens abaixo forem decididos:</p>
+          <p><strong>{resumo.motivo_bloqueio}.</strong> O botão libera quando cada item for decidido na aba
+            Pendências.</p>
+          <details>
+          <summary>Ver o que falta ({resumo.bloqueios.length})</summary>
           <ul>
             {resumo.bloqueios.map((b) => (
               <li key={b.registro_id} className={`bloqueio bloqueio--${b.severidade}`}>
@@ -20,6 +23,7 @@ export default function GerarLote({ resumo, onGerar, gerando = false }) {
               </li>
             ))}
           </ul>
+          </details>
         </div>
       )}
     </section>

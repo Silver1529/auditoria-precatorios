@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { api } from './api/client'
 import BannerEnvio from './components/BannerEnvio'
 import Carregando from './components/Carregando'
+import Marca from './components/Marca'
 import MensagemErro from './components/MensagemErro'
 import Conferencia from './pages/Conferencia'
 import DemoIdempotencia from './pages/DemoIdempotencia'
@@ -56,7 +57,14 @@ function Lote({ loteId, aba }) {
   const [, , Pagina] = ABAS.find(([chave]) => chave === aba) ?? ABAS[0]
   return (
     <>
-      <BannerEnvio liberado={resumo.envio_liberado} motivo={resumo.motivo_bloqueio} />
+      <div className="lote-topo">
+        <div>
+          <h1 className="lote-topo__titulo">Lote {loteId}</h1>
+          {resumo.criado_em && <p className="texto-suave">Analisado em {new Date(resumo.criado_em).toLocaleString('pt-BR',
+            { dateStyle: 'short', timeStyle: 'short' })}</p>}
+        </div>
+        <BannerEnvio liberado={resumo.envio_liberado} motivo={resumo.motivo_bloqueio} />
+      </div>
       <nav className="abas" aria-label="Seções do lote">
         {ABAS.map(([chave, rotulo]) => (
           <a key={chave} href={`#/lotes/${loteId}/${chave}`} aria-current={chave === aba ? 'page' : undefined}>
@@ -73,14 +81,18 @@ function Lote({ loteId, aba }) {
 
 export default function App() {
   const [usuario, setUsuario] = useState(undefined)
+  const [loginLivre, setLoginLivre] = useState(false)
   const rota = useRota()
 
   useEffect(() => {
-    api.me().then((d) => setUsuario(d.usuario)).catch(() => setUsuario(null))
+    api.me().then(setUsuario).catch((e) => {
+      setLoginLivre(Boolean(e.dados?.login_livre))
+      setUsuario(null)
+    })
   }, [])
 
   if (usuario === undefined) return <Carregando />
-  if (usuario === null) return <Login onEntrar={setUsuario} />
+  if (usuario === null) return <Login onEntrar={setUsuario} loginLivre={loginLivre} />
 
   async function sair() {
     await api.sair().catch(() => {})
@@ -90,16 +102,17 @@ export default function App() {
   return (
     <>
       <header className="topo">
-        <a href="#/" className="topo__marca">Validador de precatórios</a>
-        {rota.loteId && <span className="texto-suave">Lote #{rota.loteId}</span>}
-        <a href="#/" className="botao botao--secundario">Nova importação</a>
-        <span className="topo__usuario">{usuario}</span>
-        <button type="button" className="botao botao--secundario" onClick={sair}>Sair</button>
+        <a href="#/" className="topo__marca" aria-label="Validador de precatórios: início"><Marca /></a>
+        <span className="topo__ola">Olá, <strong>{usuario.nome}</strong></span>
+        <nav className="topo__acoes" aria-label="Conta">
+          {rota.loteId && <a href="#/" className="botao botao--secundario">Nova importação</a>}
+          <button type="button" className="botao botao--texto" onClick={sair}>Sair</button>
+        </nav>
       </header>
       <main className="conteudo">
         {rota.loteId
           ? <Lote key={rota.loteId} loteId={rota.loteId} aba={rota.aba} />
-          : <Importacao onCriado={(id) => { window.location.hash = `#/lotes/${id}/resultado` }} />}
+          : <Importacao nome={usuario.nome} onCriado={(id) => { window.location.hash = `#/lotes/${id}/resultado` }} />}
       </main>
     </>
   )

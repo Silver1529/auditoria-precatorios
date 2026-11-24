@@ -1,6 +1,6 @@
 export default function CardContagem({ titulo, valor, tom = 'neutro', icone, descricao }) {
   return (
-    <div className={`card-contagem card-contagem--${tom}`}>
+    <div role="listitem" className={`card-contagem card-contagem--${tom}`}>
       <span className="card-contagem__titulo">
         {icone && <span aria-hidden="true">{icone} </span>}{titulo}
       </span>
