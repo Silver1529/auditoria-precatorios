@@ -90,6 +90,10 @@ STORAGES = {
 # Uploads ficam em memória e o conteúdo vai para o banco (o disco do Render é efêmero).
 FILE_UPLOAD_HANDLERS = ["django.core.files.uploadhandler.MemoryFileUploadHandler"]
 LIMITE_UPLOAD_BYTES = 5 * 1024 * 1024  # por arquivo
+
+# Modo demonstração: qualquer nome e senha entram (cria um usuário sem senha e sem acesso ao admin).
+# Nunca entra numa conta que tem senha. Padrão: ligado em DEBUG, desligado em produção.
+LOGIN_LIVRE = os.environ.get("LOGIN_LIVRE", "1" if DEBUG else "0") == "1"
 FILE_UPLOAD_MAX_MEMORY_SIZE = LIMITE_UPLOAD_BYTES
 DATA_UPLOAD_MAX_MEMORY_SIZE = 25 * 1024 * 1024
 

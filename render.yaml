@@ -16,6 +16,8 @@ services:
         generateValue: true
       - key: DEBUG
         value: "0"
+      - key: LOGIN_LIVRE          # demonstração: qualquer nome e senha entram (nunca numa conta com senha)
+        value: "1"
       - key: WEB_CONCURRENCY
         value: "2"
       - key: DJANGO_SUPERUSER_USERNAME

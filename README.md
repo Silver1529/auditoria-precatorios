@@ -26,13 +26,17 @@ cd web && ../.venv/bin/python manage.py createsuperuser && cd ..
 
 | Comando | O que faz |
 |---|---|
-| `yarn dev` | Django em :8000 + Vite em :5173 com recarga automática. Abra **http://localhost:5173** |
+| `yarn dev` | Django em :8000 + Vite em :5173 com recarga automática. Abra **http://localhost:5173** e entre com qualquer nome e senha (modo demonstração) |
 | `yarn test` ou `yarn run check` | Tudo: pytest, lint, testes do front (Vitest) e ponta a ponta (Playwright) |
 | `yarn build` | Build do front em `frontend/dist` |
-| `yarn docker` ou `make start` | Postgres + imagem de produção em **http://localhost:8080** (demo / demo-senha-123) |
+| `yarn docker` ou `make start` | Postgres + imagem de produção em **http://localhost:8080** (modo demonstração) |
 | `.venv/bin/python -m precatorios.adapters.cli --dados tests/fixtures --saida saida` | Validação por linha de comando, gera os relatórios em `saida/` |
 
 > `yarn check` (sem `run`) é um comando embutido do yarn 1 e **não** roda os testes. Use `yarn test` ou `yarn run check`.
+
+**Modo demonstração** (`LOGIN_LIVRE=1`, padrão em desenvolvimento): qualquer nome e senha entram, e a tela
+cumprimenta pelo nome. O usuário criado não tem senha nem acesso ao admin, e o modo nunca entra numa conta que tem
+senha. Com `LOGIN_LIVRE=0`, só entra quem tem usuário e senha cadastrados.
 
 O `Makefile` tem os mesmos atalhos: `make setup`, `make dev`, `make test`, `make build`, `make start`.
 

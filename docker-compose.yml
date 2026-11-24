@@ -1,5 +1,5 @@
 # "Mini produção" local: Postgres + a mesma imagem que vai para o Render.
-# Acesse http://localhost:8080 (usuário demo / senha demo-senha-123).
+# Acesse http://localhost:8080: modo demonstração, entre com qualquer nome e senha.
 services:
   db:
     image: postgres:17-alpine
@@ -24,6 +24,7 @@ services:
       SECRET_KEY: somente-local-nao-usar-em-producao
       DEBUG: "0"
       HTTPS: "0"
+      LOGIN_LIVRE: "1"
       ALLOWED_HOSTS: localhost,127.0.0.1
       PORT: "8000"
       DJANGO_SUPERUSER_USERNAME: demo

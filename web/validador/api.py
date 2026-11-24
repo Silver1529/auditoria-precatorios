@@ -8,7 +8,7 @@ from dataclasses import asdict
 from pathlib import Path
 
 from django.conf import settings
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.http import HttpRequest, JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -96,24 +96,43 @@ def _resumo(dominio) -> dict:
 
 # --- sessão --------------------------------------------------------------------------------
 
+def _quem(usuario) -> dict:
+    return {"usuario": usuario.get_username(), "nome": usuario.first_name or usuario.get_username()}
+
+
 @ensure_csrf_cookie
 @require_GET
 @api
 def me(request):
     if not request.user.is_authenticated:
-        return _erro("Faça login para continuar.", 401)
-    return JsonResponse({"usuario": request.user.get_username()})
+        return _erro("Faça login para continuar.", 401, login_livre=settings.LOGIN_LIVRE)
+    return JsonResponse(_quem(request.user))
+
+
+def _usuario_demonstracao(nome: str):
+    """Modo demonstração: entra com qualquer nome. Nunca assume uma conta que tem senha (ex.: admin)."""
+    usuario, criado = get_user_model().objects.get_or_create(username=nome[:150], defaults={"first_name": nome[:150]})
+    if criado:
+        usuario.set_unusable_password()
+        usuario.save(update_fields=["password"])
+        log.info("usuário de demonstração criado: %s", nome)
+    return None if usuario.has_usable_password() else usuario
 
 
 @require_POST
 @api
 def entrar(request):
     corpo = _corpo_json(request)
-    usuario = authenticate(request, username=corpo.get("usuario", ""), password=corpo.get("senha", ""))
+    nome, senha = str(corpo.get("usuario", "")).strip(), str(corpo.get("senha", ""))
+    if not nome or not senha:
+        return _erro("Preencha usuário e senha.", 400)
+    usuario = authenticate(request, username=nome, password=senha)
+    if usuario is None and settings.LOGIN_LIVRE:
+        usuario = _usuario_demonstracao(nome)
     if usuario is None:
         return _erro("Usuário ou senha inválidos.", 400)
-    login(request, usuario)
-    return JsonResponse({"usuario": usuario.get_username()})
+    login(request, usuario, backend="django.contrib.auth.backends.ModelBackend")
+    return JsonResponse(_quem(usuario))
 
 
 @require_POST

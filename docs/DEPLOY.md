@@ -32,8 +32,8 @@ mesmo domínio, mais um Postgres gratuito.
    - `DJANGO_SUPERUSER_USERNAME`: o usuário para entrar na tela (ex.: `demo`);
    - `DJANGO_SUPERUSER_PASSWORD`: uma senha forte. Anote.
 5. Clique em **Apply**. O primeiro deploy leva alguns minutos (build do front + imagem Python).
-6. Quando o status ficar **Live**, abra a URL `https://validador-precatorios-xxxx.onrender.com` e entre com o usuário
-   do passo 4.
+6. Quando o status ficar **Live**, abra a URL `https://validador-precatorios-xxxx.onrender.com`. No modo
+   demonstração, qualquer nome e senha entram; o usuário do passo 4 é o administrador (`/admin`).
 
 ## Variáveis de ambiente
 
@@ -46,6 +46,7 @@ mesmo domínio, mais um Postgres gratuito.
 | `CSRF_TRUSTED_ORIGINS` | não precisa | derivado do host; aceita lista separada por vírgula se usar domínio próprio |
 | `HTTPS` | não precisa | padrão `1` quando `DEBUG=0` (cookies seguros, redirecionamento, HSTS curto) |
 | `DJANGO_SUPERUSER_USERNAME` / `_PASSWORD` | você define | `sync: false` |
+| `LOGIN_LIVRE` | `1` | modo demonstração: qualquer nome e senha entram e a tela diz "Olá, nome". Cria um usuário sem senha e sem acesso ao admin; **nunca** entra numa conta que tem senha. Use `0` para exigir senha. |
 | `WEB_CONCURRENCY` | `2` | workers do gunicorn |
 
 ## Conferir o deploy
