@@ -8,7 +8,7 @@ from decimal import Decimal
 from typing import Any
 
 from precatorios.domain.datas import DataInvalida, dia_e_mes_ambiguos, ler_data, ler_data_hora
-from precatorios.domain.dinheiro import ValorAusente, ValorInvalido, ler_valor
+from precatorios.domain.dinheiro import ValorAusente, ValorInvalido, formatar_brl, ler_valor
 from precatorios.domain.evento import EventoPagamento, TipoEvento
 from precatorios.domain.processo import (
     ProcessoInvalido,
@@ -25,9 +25,10 @@ log = logging.getLogger(__name__)
 ARQUIVO = "pagamentos.json"
 
 
-def _oc(regra_id: str, detalhe: str = "", campo: str = "", antes: object = "", depois: object = "") -> Ocorrencia:
+def _oc(regra_id: str, detalhe: str = "", campo: str = "", antes: object = "", depois: object = "",
+        detalhe_usuario: str = "") -> Ocorrencia:
     motivo = obter_regra(regra_id).mensagem + (f": {detalhe}" if detalhe else "")
-    return Ocorrencia(regra_id, motivo, campo, _texto(antes), _texto(depois))
+    return Ocorrencia(regra_id, motivo, campo, _texto(antes), _texto(depois), detalhe_usuario)
 
 
 def _texto(valor: object) -> str:
@@ -95,9 +96,23 @@ def _duplicata(registro_id: str, chave: str, bruto: Mapping[str, Any], posicao: 
 
 def _com_conflito(decisao: Decisao, versoes: list[Mapping[str, Any]]) -> Decisao:
     resumo = "; ".join(f"valor={v.get('valor')} atualizado_em={v.get('atualizado_em')}" for v in versoes)
-    oc = _oc("PAG-VERSAO-CONFLITANTE", f"{len(versoes)} versões ({resumo})")
+    legivel = " e ".join(_versao_legivel(v) for v in versoes)
+    oc = _oc("PAG-VERSAO-CONFLITANTE", f"{len(versoes)} versões ({resumo})",
+             detalhe_usuario=f"{len(versoes)} versões: {legivel}. Decida qual vale.")
     return Decisao(decisao.registro_id, decisao.arquivo, decisao.chave,
                    decisao.ocorrencias + (oc,), decisao.evidencia, decisao.evento)
+
+
+def _versao_legivel(bruto: Mapping[str, Any]) -> str:
+    try:
+        valor = formatar_brl(ler_valor(bruto.get("valor")).valor)
+    except ValorInvalido:
+        valor = f"valor ilegível ({bruto.get('valor')})"
+    try:
+        quando = ler_data_hora(bruto.get("atualizado_em")).strftime("%d/%m/%Y %H:%M")
+    except DataInvalida:
+        return valor
+    return f"{valor} (atualizada em {quando})"
 
 
 def _validar_registro(

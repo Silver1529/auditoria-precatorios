@@ -11,7 +11,13 @@ import logging
 import sys
 from pathlib import Path
 
-from precatorios.adapters.leitores import ArquivoAusente, JsonInvalido, LeiauteInvalido, LeitorArquivosBytes
+from precatorios.adapters.leitores import (
+    ArquivoAusente,
+    ArquivoIlegivel,
+    JsonInvalido,
+    LeiauteInvalido,
+    LeitorArquivosBytes,
+)
 from precatorios.adapters.relogio import RelogioSistema
 from precatorios.adapters.saida import escrever_saidas
 from precatorios.application.analise import Analise, executar_analise
@@ -64,7 +70,7 @@ def main(argv: list[str] | None = None) -> int:
         analise = executar_analise(LeitorArquivosBytes.de_diretorio(args.dados))
         if args.resolucoes:
             analise = _aplicar_resolucoes(analise, args.resolucoes)
-    except (ArquivoAusente, JsonInvalido, LeiauteInvalido, EntradaInvalida, ErroResolucao, KeyError) as erro:
+    except (ArquivoAusente, ArquivoIlegivel, JsonInvalido, LeiauteInvalido, EntradaInvalida, ErroResolucao, KeyError) as erro:
         log.error("entrada inválida: %s", erro)
         return ERRO_ENTRADA
 

@@ -39,7 +39,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.auth.middleware.LoginRequiredMiddleware",  # toda tela exige login
+    "validador.middleware.ApiExigeLogin",  # toda rota /api/ exige sessão (401 em JSON)
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -82,12 +82,10 @@ STORAGES = {
 
 # Uploads ficam em memória e o conteúdo vai para o banco (o disco do Render é efêmero).
 FILE_UPLOAD_HANDLERS = ["django.core.files.uploadhandler.MemoryFileUploadHandler"]
-FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
+LIMITE_UPLOAD_BYTES = 5 * 1024 * 1024  # por arquivo
+FILE_UPLOAD_MAX_MEMORY_SIZE = LIMITE_UPLOAD_BYTES
 DATA_UPLOAD_MAX_MEMORY_SIZE = 25 * 1024 * 1024
 
-LOGIN_URL = "login"
-LOGIN_REDIRECT_URL = "inicio"
-LOGOUT_REDIRECT_URL = "login"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 if not DEBUG:

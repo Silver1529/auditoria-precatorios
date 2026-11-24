@@ -8,6 +8,7 @@ from datetime import date
 from precatorios.domain.datas import Apresentacao
 
 DIA_CORTE = (4, 2)  # (mês, dia)
+LIMITE_ALERTA_DIAS = 60  # prazo a até 60 dias aparece em alerta na tela
 
 
 @dataclass(frozen=True)
@@ -35,3 +36,13 @@ def prazo_da_apresentacao(apresentacao: Apresentacao) -> PrazoCalculado:
         calcular_prazo(apresentacao.data_literal),
         calcular_prazo(apresentacao.data_local),
     }))
+
+
+def situacao_prazo(prazo: date, hoje: date) -> str:
+    """"vencido", "atencao" (vence em até LIMITE_ALERTA_DIAS dias) ou "no_prazo"."""
+    dias = (prazo - hoje).days
+    if dias < 0:
+        return "vencido"
+    if dias <= LIMITE_ALERTA_DIAS:
+        return "atencao"
+    return "no_prazo"

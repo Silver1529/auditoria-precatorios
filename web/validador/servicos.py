@@ -51,12 +51,13 @@ def carregar(analise: Analise) -> AnaliseDominio:
     return dominio
 
 
-def resolver(analise: Analise, registro_id: str, acao: str, justificativa: str, usuario) -> None:
+def resolver(analise: Analise, registro_id: str, acao: str, justificativa: str | None, usuario) -> AnaliseDominio:
     nova = resolver_pendencia(carregar(analise), registro_id, Acao(acao), justificativa,
                               usuario.get_username(), RelogioSistema())
     resolucao = nova.resolucao_de(registro_id)
     ResolucaoRegistro.objects.create(analise=analise, registro_id=registro_id, acao=resolucao.acao.value,
                                      justificativa=resolucao.justificativa, usuario=usuario, em=resolucao.em)
+    return nova
 
 
 def gerar_e_importar(analise: Analise, usuario) -> tuple[Lote, int]:
@@ -70,23 +71,37 @@ def gerar_e_importar(analise: Analise, usuario) -> tuple[Lote, int]:
 def demonstrar_idempotencia(analise: Analise) -> dict:
     """SIMULAÇÃO DO COMPORTAMENTO INFERIDO: o script original não foi fornecido.
 
-    Importa os mesmos eventos aceitos duas vezes em duas tabelas: uma sem UNIQUE (como o schema
-    atual) e outra com UniqueConstraint(evento_id).
+    Importa os mesmos eventos aceitos duas vezes em duas tabelas reais: uma sem UNIQUE (como o
+    schema atual) e outra com UniqueConstraint(evento_id). Tudo roda numa transação desfeita no
+    fim, então a demonstração não deixa dados gravados.
     """
     eventos = carregar(analise).eventos_aceitos()
-    resultado: dict[str, list[dict[str, Decimal]]] = {"sem_unique": [], "com_unique": []}
+    rodadas: dict[str, list[dict[str, Decimal]]] = {"sem_unique": [], "com_unique": []}
     with transaction.atomic():
-        DemoPagamentoSemUnique.objects.all().delete()
-        DemoPagamentoComUnique.objects.all().delete()
         for _rodada in range(2):
             for e in eventos:
                 campos = {"processo": e.processo, "tipo": e.tipo.value, "valor": e.valor, "pago_em": e.pago_em}
                 DemoPagamentoSemUnique.objects.create(evento_id=e.evento_id, **campos)
                 DemoPagamentoComUnique.objects.get_or_create(evento_id=e.evento_id, defaults=campos)
-            resultado["sem_unique"].append(_totais(DemoPagamentoSemUnique))
-            resultado["com_unique"].append(_totais(DemoPagamentoComUnique))
-    resultado["esperado"] = somar_por_processo(eventos)
-    return resultado
+            rodadas["sem_unique"].append(_totais(DemoPagamentoSemUnique))
+            rodadas["com_unique"].append(_totais(DemoPagamentoComUnique))
+        transaction.set_rollback(True)
+    return {
+        "aviso": AVISO_SIMULACAO,
+        "eventos": len(eventos),
+        "esperado": somar_por_processo(eventos),
+        **{modelo: _rodadas(r) for modelo, r in rodadas.items()},
+    }
+
+
+AVISO_SIMULACAO = "Simulação do comportamento inferido. O script original não foi fornecido."
+
+
+def _rodadas(totais: list[dict[str, Decimal]]) -> dict:
+    primeira, segunda = totais
+    return {"primeira": primeira, "segunda": segunda,
+            "total_primeira": sum(primeira.values(), Decimal("0.00")),
+            "total_segunda": sum(segunda.values(), Decimal("0.00"))}
 
 
 def _totais(modelo) -> dict[str, Decimal]:

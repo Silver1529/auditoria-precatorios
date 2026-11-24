@@ -6,7 +6,7 @@ from collections.abc import Mapping, Sequence
 from typing import Any
 
 from precatorios.domain.datas import DataInvalida, ler_apresentacao, ler_data
-from precatorios.domain.prazo import prazo_da_apresentacao
+from precatorios.domain.prazo import calcular_prazo, prazo_da_apresentacao
 from precatorios.domain.processo import ProcessoInvalido, formatar_processo, normalizar_processo
 from precatorios.domain.regras import obter_regra
 from precatorios.domain.resultado import Decisao, Ocorrencia
@@ -14,9 +14,10 @@ from precatorios.domain.resultado import Decisao, Ocorrencia
 log = logging.getLogger(__name__)
 
 
-def _oc(regra_id: str, detalhe: str = "", campo: str = "", antes: str = "", depois: str = "") -> Ocorrencia:
+def _oc(regra_id: str, detalhe: str = "", campo: str = "", antes: str = "", depois: str = "",
+        detalhe_usuario: str = "") -> Ocorrencia:
     motivo = obter_regra(regra_id).mensagem + (f": {detalhe}" if detalhe else "")
-    return Ocorrencia(regra_id, motivo, campo, antes, depois)
+    return Ocorrencia(regra_id, motivo, campo, antes, depois, detalhe_usuario)
 
 
 def _indexar(linhas: Sequence[Mapping[str, Any]]) -> dict[str, Mapping[str, Any]]:
@@ -61,7 +62,12 @@ def _avaliar(bruto_ap: str, bruto_hub_ap: str, prazo_hub: str, evidencia: dict[s
         return [_oc("PRZ-APRESENTACAO-INVALIDA", str(erro), "apresentado_em", bruto_ap)]
     if calculado.ambiguo:
         opcoes = " ou ".join(sorted(d.isoformat() for d in calculado.candidatos))
-        return [_oc("PRZ-FUSO-INDEFINIDO", f"{bruto_ap} dá {opcoes}", "prazo_pagamento", prazo_hub)]
+        ap = ler_apresentacao(bruto_ap)
+        explicacao = (f"Pela data como veio ({ap.data_literal.isoformat()}) o prazo é "
+                      f"{calcular_prazo(ap.data_literal).isoformat()}; no horário de Brasília "
+                      f"({ap.data_local.isoformat()}) é {calcular_prazo(ap.data_local).isoformat()}.")
+        return [_oc("PRZ-FUSO-INDEFINIDO", f"{bruto_ap} dá {opcoes}", "prazo_pagamento", prazo_hub,
+                    detalhe_usuario=explicacao)]
     prazo = calculado.prazo.isoformat()
     evidencia["prazo_calculado"] = prazo
     if not prazo_hub:

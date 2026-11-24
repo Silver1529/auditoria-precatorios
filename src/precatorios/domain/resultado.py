@@ -36,10 +36,16 @@ class Ocorrencia:
     campo: str = ""
     antes: str = ""
     depois: str = ""
+    detalhe_usuario: str = ""  # complemento em linguagem simples (ex.: os dois valores em R$)
 
     @property
     def efeito(self) -> Efeito:
         return obter_regra(self.regra_id).efeito
+
+    @property
+    def mensagem_usuario(self) -> str:
+        base = obter_regra(self.regra_id).mensagem_usuario
+        return f"{base} {self.detalhe_usuario}" if self.detalhe_usuario else base
 
 
 @dataclass(frozen=True)

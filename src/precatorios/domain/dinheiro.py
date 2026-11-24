@@ -61,3 +61,10 @@ def _em_centavos(valor: Decimal) -> Decimal:
     if arredondado != valor:
         raise ValorInvalido(f"valor com mais de 2 casas decimais: {valor}")
     return arredondado
+
+
+def formatar_brl(valor: Decimal) -> str:
+    """R$ 15.500,00 (formato brasileiro, sem depender do locale do sistema)."""
+    inteiro, _, centavos = f"{abs(valor):,.2f}".partition(".")
+    texto = f"R$ {inteiro.replace(',', '.')},{centavos}"
+    return f"-{texto}" if valor < 0 else texto

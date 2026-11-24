@@ -1,11 +1,17 @@
 from django.urls import path
 
-from validador import views
+from validador import api
 
 urlpatterns = [
-    path("", views.inicio, name="inicio"),
-    path("analises/<int:pk>/", views.detalhe, name="detalhe"),
-    path("analises/<int:pk>/pendencias/", views.pendencias, name="pendencias"),
-    path("analises/<int:pk>/gerar-lote/", views.gerar_lote, name="gerar_lote"),
-    path("analises/<int:pk>/idempotencia/", views.idempotencia, name="idempotencia"),
+    path("api/login", api.entrar),
+    path("api/logout", api.sair),
+    path("api/me", api.me),
+    path("api/lotes", api.criar_lote),
+    path("api/lotes/<int:lote_id>", api.lote),
+    path("api/lotes/<int:lote_id>/registros", api.registros),
+    path("api/lotes/<int:lote_id>/conferencia", api.conferencia),
+    path("api/lotes/<int:lote_id>/prazos", api.prazos),
+    path("api/lotes/<int:lote_id>/gerar", api.gerar),
+    path("api/pendencias/<path:registro_id>/decisao", api.decidir),
+    path("api/demo/idempotencia", api.demo_idempotencia),
 ]
