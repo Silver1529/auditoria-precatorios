@@ -3,4 +3,4 @@
 -- Ordem de aplicação: 01 → 06. Todas são aditivas: nenhuma apaga coluna, tabela ou dado.
 -- Antes de produção: rodar em homologação com uma cópia do banco, revisar com quem administra o banco
 -- e agendar janela para os passos que validam restrições em tabelas grandes.
--- Explicação de cada mudança em docs/PREVENCAO.md.
+-- Explicação de cada mudança em DIAGNOSTICO.md, parte 2 (prevenção).

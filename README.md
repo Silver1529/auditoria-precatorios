@@ -4,7 +4,8 @@ Diagnóstico e limpeza dos dados de pagamentos de precatórios recebidos do trib
 vieram, classifica cada registro em **OK, CORRIGIDO, DESCARTADO ou PENDENTE** com regra, motivo e evidência, e só
 libera o lote para importação quando não há pendência nem erro.
 
-- Diagnóstico completo: [DIAGNOSTICO.md](DIAGNOSTICO.md)
+- **Diagnóstico, prevenção e dúvidas** (um arquivo, três partes): [DIAGNOSTICO.md](DIAGNOSTICO.md)
+- Exemplos de saída da limpeza (relatório, CSVs, lote): [exemplos/](exemplos/)
 - Fluxo operacional analisado: [docs/FLUXO_OPERACIONAL.md](docs/FLUXO_OPERACIONAL.md)
 - Deploy: [docs/DEPLOY.md](docs/DEPLOY.md)
 - Logs (catálogo de eventos e como investigar): [docs/LOGS.md](docs/LOGS.md)

@@ -8,7 +8,7 @@ from enum import Enum
 DOC_TRIBUNAL = "docs/referencia/DOCUMENTACAO_TRIBUNAL.md"
 SCHEMA = "sql/schema_atual.sql"
 FLUXO = "docs/FLUXO_OPERACIONAL.md"
-DUVIDAS = "docs/DUVIDAS.md"
+DUVIDAS = "DIAGNOSTICO.md (parte 3, dúvidas)"
 
 
 class Severidade(str, Enum):
