@@ -47,6 +47,7 @@ mesmo domínio, mais um Postgres gratuito.
 | `HTTPS` | não precisa | padrão `1` quando `DEBUG=0` (cookies seguros, redirecionamento, HSTS curto) |
 | `DJANGO_SUPERUSER_USERNAME` / `_PASSWORD` | você define | `sync: false` |
 | `LOGIN_LIVRE` | `1` | modo demonstração: qualquer nome e senha entram e a tela diz "Olá, nome". Cria um usuário sem senha e sem acesso ao admin; **nunca** entra numa conta que tem senha. Use `0` para exigir senha. |
+| `LOG_FORMATO` / `LOG_NIVEL` | `legivel` / `INFO` | opcional; `json` facilita filtrar. Ver [LOGS.md](LOGS.md) |
 | `WEB_CONCURRENCY` | `2` | workers do gunicorn |
 
 ## Conferir o deploy

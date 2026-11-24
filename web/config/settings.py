@@ -43,6 +43,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "validador.logs.MiddlewareLog",  # id da requisição, contexto e linha http
     "validador.middleware.ApiExigeLogin",  # toda rota /api/ exige sessão (401 em JSON)
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -108,10 +109,25 @@ if HTTPS:
     SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = 3600  # curto de propósito: é uma demonstração
 
+# Logs: eventos com nome, campos e contexto (req, usuario, lote). Ver docs/LOGS.md.
+# LOG_FORMATO=legivel (padrão) ou json. LOG_NIVEL=INFO (padrão) ou DEBUG (mostra o passo a passo do núcleo).
+LOG_FORMATO = os.environ.get("LOG_FORMATO", "legivel")
+LOG_NIVEL = os.environ.get("LOG_NIVEL", "INFO")
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "handlers": {"console": {"class": "logging.StreamHandler"}},
-    "loggers": {"precatorios": {"handlers": ["console"], "level": "INFO"},
-                "validador": {"handlers": ["console"], "level": "INFO"}},
+    "filters": {"contexto": {"()": "validador.logs.ContextoFilter"}},
+    "formatters": {
+        "legivel": {"()": "validador.logs.FormatoLegivel"},
+        "json": {"()": "validador.logs.FormatoJson"},
+    },
+    "handlers": {"console": {"class": "logging.StreamHandler", "formatter": LOG_FORMATO, "filters": ["contexto"]}},
+    "root": {"handlers": ["console"], "level": "WARNING"},
+    "loggers": {
+        "validador": {"level": LOG_NIVEL},
+        "precatorios": {"level": LOG_NIVEL},
+        "django": {"level": "WARNING"},
+        "django.server": {"level": "ERROR"},     # a linha http do MiddlewareLog substitui o log do runserver
+        "django.request": {"level": "ERROR"},    # 4xx já viram eventos (upload.recusado, decisao.recusada...)
+    },
 }

@@ -38,7 +38,7 @@ def ler_csv_precatorios(conteudo: bytes) -> TabelaLida:
     if faltando:
         raise LeiauteInvalido(f"colunas ausentes: {', '.join(sorted(faltando))}")
     linhas = [{nomes[k]: (v or "").strip() for k, v in linha.items() if k is not None} for linha in leitor]
-    log.info("CSV lido: encoding=%s separador=%r linhas=%d", encoding, separador, len(linhas))
+    log.debug("CSV lido: encoding=%s separador=%r linhas=%d", encoding, separador, len(linhas))
     return TabelaLida(linhas, encoding, separador)
 
 

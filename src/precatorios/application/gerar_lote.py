@@ -54,12 +54,12 @@ def listar_bloqueios(analise: Analise) -> list[Bloqueio]:
 def gerar_lote(analise: Analise) -> Lote:
     bloqueios = listar_bloqueios(analise)
     if bloqueios:
-        log.warning("geração de lote recusada: %d bloqueio(s)", len(bloqueios))
+        log.debug("geração de lote recusada: %d bloqueio(s)", len(bloqueios))
         raise LoteBloqueado(bloqueios)
     eventos = analise.eventos_aceitos()
     processos = sorted({e.processo for e in eventos})
     lote = Lote(tuple(eventos), tuple(analise.precatorios[p] for p in processos), somar_por_processo(eventos))
-    log.info("lote gerado: %d eventos", len(lote.eventos))
+    log.debug("lote gerado: %d eventos", len(lote.eventos))
     return lote
 
 
@@ -68,7 +68,7 @@ def importar_lote(repositorio: RepositorioLote, lote: Lote) -> int:
     for precatorio in lote.precatorios:
         repositorio.salvar_precatorio(precatorio)
     novos = sum(repositorio.salvar_evento_se_novo(e) for e in lote.eventos)
-    log.info("lote importado: %d novos de %d", novos, len(lote.eventos))
+    log.debug("lote importado: %d novos de %d", novos, len(lote.eventos))
     return novos
 
 

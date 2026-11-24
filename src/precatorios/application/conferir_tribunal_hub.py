@@ -34,7 +34,7 @@ def conferir_tribunal_hub(tribunal: Sequence[Linha], hub: Sequence[Linha]) -> li
         _conferir(processo, por_tribunal.get(processo), por_hub.get(processo))
         for processo in sorted(por_tribunal.keys() | por_hub.keys())
     ]
-    log.info("conferência tribunal x hub: %d processos", len(decisoes))
+    log.debug("conferência tribunal x hub: %d processos", len(decisoes))
     return decisoes + invalidas
 
 

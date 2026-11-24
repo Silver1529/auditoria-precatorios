@@ -9,4 +9,4 @@ if [ -n "${DJANGO_SUPERUSER_USERNAME:-}" ] && [ -n "${DJANGO_SUPERUSER_PASSWORD:
     >/dev/null 2>&1 && echo "usuário ${DJANGO_SUPERUSER_USERNAME} criado" || echo "usuário ${DJANGO_SUPERUSER_USERNAME} já existe"
 fi
 exec gunicorn config.wsgi:application --bind "0.0.0.0:${PORT:-10000}" \
-  --workers "${WEB_CONCURRENCY:-2}" --access-logfile - --error-logfile -
+  --workers "${WEB_CONCURRENCY:-2}" --error-logfile -   # acesso: a linha "http" do Django já registra

@@ -53,6 +53,8 @@ def _aplicar_resolucoes(analise: Analise, caminho: Path) -> Analise:
             analise, item["registro_id"], Acao(item["acao"]), item.get("justificativa"),
             item.get("usuario", "cli"), relogio,
         )
+        log.info("decisão registrada: %s %s por %s (%s)", item["registro_id"], item["acao"],
+                 item.get("usuario", "cli"), item.get("justificativa"))
     return analise
 
 

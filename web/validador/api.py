@@ -31,6 +31,7 @@ from precatorios.application.visao import (
     visao_resumo,
 )
 from validador import servicos
+from validador.logs import definir_contexto, evento
 from validador.models import Analise
 
 log = logging.getLogger(__name__)
@@ -69,17 +70,20 @@ def api(view):
             return view(request, *args, **kwargs)
         except LoteNaoEncontrado:
             return _erro("Lote não encontrado.", 404)
-        except Exception:  # noqa: BLE001 - última barreira: registra no log, nunca expõe detalhes
-            log.exception("erro inesperado em %s", request.path)
+        except Exception as erro:  # noqa: BLE001 - última barreira: registra no log, nunca expõe detalhes
+            evento(log, logging.ERROR, "erro.inesperado", exc_info=True, caminho=request.path,
+                   metodo=request.method, tipo=type(erro).__name__)
             return _erro("Erro inesperado. Tente de novo; se persistir, avise o suporte.", 500)
     return envolvida
 
 
 def _lote(lote_id) -> Analise:
     try:
-        return Analise.objects.get(pk=int(lote_id))
+        analise = Analise.objects.get(pk=int(lote_id))
     except (Analise.DoesNotExist, ValueError, TypeError) as erro:
         raise LoteNaoEncontrado from erro
+    definir_contexto(lote=analise.id)
+    return analise
 
 
 def _corpo_json(request: HttpRequest) -> dict:
@@ -115,7 +119,7 @@ def _usuario_demonstracao(nome: str):
     if criado:
         usuario.set_unusable_password()
         usuario.save(update_fields=["password"])
-        log.info("usuário de demonstração criado: %s", nome)
+        evento(log, logging.INFO, "usuario.demonstracao_criado", usuario=nome)
     return None if usuario.has_usable_password() else usuario
 
 
@@ -126,18 +130,22 @@ def entrar(request):
     nome, senha = str(corpo.get("usuario", "")).strip(), str(corpo.get("senha", ""))
     if not nome or not senha:
         return _erro("Preencha usuário e senha.", 400)
-    usuario = authenticate(request, username=nome, password=senha)
+    usuario, modo = authenticate(request, username=nome, password=senha), "senha"
     if usuario is None and settings.LOGIN_LIVRE:
-        usuario = _usuario_demonstracao(nome)
+        usuario, modo = _usuario_demonstracao(nome), "demonstracao"
     if usuario is None:
+        evento(log, logging.WARNING, "login.recusado", usuario=nome)
         return _erro("Usuário ou senha inválidos.", 400)
     login(request, usuario, backend="django.contrib.auth.backends.ModelBackend")
+    definir_contexto(usuario=usuario.get_username())
+    evento(log, logging.INFO, "login.ok", usuario=usuario.get_username(), modo=modo)
     return JsonResponse(_quem(usuario))
 
 
 @require_POST
 @api
 def sair(request):
+    evento(log, logging.INFO, "logout")
     logout(request)
     return JsonResponse({"ok": True})
 
@@ -174,6 +182,7 @@ def criar_lote(request):
                 f"Não foi possível ler o arquivo: {getattr(erro, 'motivo', erro)}")
         else:
             return JsonResponse({"lote_id": analise.id}, status=201)
+    evento(log, logging.WARNING, "upload.recusado", arquivos=erros)
     return _erro("Não foi possível validar os arquivos.", 400, arquivos=erros)
 
 
@@ -223,6 +232,7 @@ def decidir(request, registro_id):
         dominio = servicos.resolver(analise, registro_id, decisao.upper(), corpo.get("justificativa"), request.user)
     except tuple(ERROS_DECISAO) as erro:
         status, mensagem = ERROS_DECISAO[type(erro)]
+        evento(log, logging.WARNING, "decisao.recusada", registro=registro_id, decisao=decisao, motivo=mensagem)
         return _erro(mensagem, status)
     return JsonResponse({"ok": True, "resumo": _resumo(dominio)})
 
@@ -235,6 +245,8 @@ def gerar(request, lote_id):
         lote_gerado, novos = servicos.gerar_e_importar(analise, request.user)
     except LoteBloqueado:
         resumo = _resumo(servicos.carregar(analise))
+        evento(log, logging.WARNING, "lote.bloqueado", pendencias=resumo["pendencias"], erros=resumo["erros"],
+               registros=[b["registro_id"] for b in resumo["bloqueios"]])
         return _erro(resumo["motivo_bloqueio"], 409, bloqueios=resumo["bloqueios"])
     return JsonResponse({"eventos": len(lote_gerado.eventos), "novos": novos, "totais": lote_gerado.totais})
 

@@ -96,7 +96,7 @@ def executar_analise(leitor: LeitorArquivos) -> Analise:
         + conferir_tribunal_hub(tribunal.linhas, hub.linhas)
         + conferir_prazos(apresentacoes, hub.linhas)
     )
-    log.info("análise concluída: %d decisões", len(decisoes))
+    log.debug("análise concluída: %d decisões", len(decisoes))
     return Analise(tuple(decisoes), simular_script_inferido(pagamentos), precatorios)
 
 

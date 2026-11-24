@@ -26,7 +26,7 @@ def _indexar(linhas: Sequence[Mapping[str, Any]]) -> dict[str, Mapping[str, Any]
         try:
             indice[normalizar_processo(linha.get("processo"))] = linha
         except ProcessoInvalido:
-            log.warning("linha ignorada na conferência de prazos (processo inválido): %s", linha)
+            log.debug("linha ignorada na conferência de prazos (processo inválido): %s", linha)
     return indice
 
 

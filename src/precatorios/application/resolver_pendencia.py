@@ -56,7 +56,7 @@ def resolver_pendencia(
         raise AprovacaoImpossivel(f"{registro_id} não tem evento válido para aprovar; só pode ser rejeitado")
 
     resolucao = Resolucao(registro_id, acao, texto, usuario, relogio.agora())
-    log.info(
+    log.debug(
         "pendência resolvida: registro=%s acao=%s usuario=%s regras=%s justificativa=%r",
         registro_id, acao.value, usuario, ",".join(decisao.regras), texto,
     )

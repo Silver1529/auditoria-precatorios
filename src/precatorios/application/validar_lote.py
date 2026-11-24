@@ -58,7 +58,7 @@ def validar_pagamentos(registros: Sequence[Mapping[str, Any]], processos_conheci
         if chave in conflitantes:
             decisao = _com_conflito(decisao, conflitantes[chave])
         decisoes.append(decisao)
-    log.info("pagamentos validados: %d registros", len(decisoes))
+    log.debug("pagamentos validados: %d registros", len(decisoes))
     return decisoes
 
 

@@ -7,6 +7,7 @@ libera o lote para importação quando não há pendência nem erro.
 - Diagnóstico completo: [DIAGNOSTICO.md](DIAGNOSTICO.md)
 - Fluxo operacional analisado: [docs/FLUXO_OPERACIONAL.md](docs/FLUXO_OPERACIONAL.md)
 - Deploy: [docs/DEPLOY.md](docs/DEPLOY.md)
+- Logs (catálogo de eventos e como investigar): [docs/LOGS.md](docs/LOGS.md)
 
 ## Requisitos
 
