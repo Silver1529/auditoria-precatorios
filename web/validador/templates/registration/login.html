@@ -1,0 +1,11 @@
+{% extends "validador/base.html" %}
+{% block conteudo %}
+<h1>Entrar</h1>
+<form method="post">{% csrf_token %}
+  {{ form.non_field_errors }}
+  <table>{{ form.as_table }}</table>
+  <input type="hidden" name="next" value="{{ next }}">
+  <p><button class="primario" type="submit">Entrar</button></p>
+</form>
+<p class="info">Demonstração com dados fictícios.</p>
+{% endblock %}

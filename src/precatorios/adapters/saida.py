@@ -107,7 +107,7 @@ def _lote(lote: Lote, caminho: Path) -> None:
     ))
 
 
-def _moeda(valor: Decimal | None) -> str:
+def formatar_moeda(valor: Decimal | None) -> str:
     if valor is None:
         return "—"
     inteiro, _, centavos = f"{valor:,.2f}".partition(".")
@@ -158,8 +158,8 @@ def gerar_relatorio(analise: Analise, bloqueios: list[Bloqueio], lote: Lote | No
     for processo in sorted(set(analise.totais_antes) | set(depois)):
         legivel = _processo_legivel(processo)
         rotulo = legivel if legivel == processo or not processo else f"`{processo}` (= {legivel})"
-        partes.append(f"| {rotulo} | {_moeda(analise.totais_antes.get(processo))} "
-                      f"| {_moeda(depois.get(processo))} |")
+        partes.append(f"| {rotulo} | {formatar_moeda(analise.totais_antes.get(processo))} "
+                      f"| {formatar_moeda(depois.get(processo))} |")
     partes.append("\n## Lote\n")
     if lote is not None:
         partes.append(f"Lote gerado com {len(lote.eventos)} eventos (`lote.csv`).")

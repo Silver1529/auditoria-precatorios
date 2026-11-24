@@ -1,0 +1,19 @@
+{% extends "validador/base.html" %}
+{% block conteudo %}
+<h1>Nova análise</h1>
+<p>Envie os arquivos como foram recebidos. Eles não são alterados: o conteúdo é guardado no banco com o hash SHA-256.</p>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <table>{{ form.as_table }}</table>
+  <p><button class="primario" type="submit">Analisar</button></p>
+</form>
+
+<h2>Análises anteriores</h2>
+<table>
+  <tr><th>#</th><th>Criada em</th><th>Por</th></tr>
+  {% for a in analises %}
+  <tr><td><a href="{% url 'detalhe' a.id %}">{{ a.id }}</a></td><td>{{ a.criada_em }}</td><td>{{ a.criada_por }}</td></tr>
+  {% empty %}<tr><td colspan="3">Nenhuma análise.</td></tr>{% endfor %}
+</table>
+{% endblock %}

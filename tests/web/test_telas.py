@@ -130,7 +130,7 @@ def test_resolver_tudo_libera_lote_e_reimportar_nao_duplica(logado, analise_id):
     logado.post(reverse("gerar_lote", args=[analise_id]))
     uma_vez = Pagamento.objects.count()
     logado.post(reverse("gerar_lote", args=[analise_id]))
-    assert Pagamento.objects.count() == uma_vez == 7
+    assert Pagamento.objects.count() == uma_vez == 8  # 3 OK + 2 corrigidos + 3 aprovados
     assert Pagamento.objects.filter(evento_id="ev-001").get().valor == Decimal("15500.00")
 
 

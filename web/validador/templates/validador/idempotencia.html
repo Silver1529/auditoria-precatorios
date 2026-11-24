@@ -1,0 +1,22 @@
+{% extends "validador/base.html" %}
+{% load formato %}
+{% block nav %}{% include "validador/_nav_analise.html" %}{% endblock %}
+{% block conteudo %}
+<h1>Demonstração de idempotência</h1>
+<div class="aviso"><b>Simulação do comportamento inferido, o script original não foi fornecido.</b>
+Os mesmos eventos aceitos desta análise são importados <b>duas vezes</b> em duas tabelas de demonstração:
+uma <b>sem UNIQUE</b> em <code>evento_id</code> (como o schema atual) e outra com <code>UniqueConstraint(evento_id)</code>.
+É o que acontece quando o operador roda o script de novo com o mesmo arquivo.</div>
+<form method="post">{% csrf_token %}<p><button class="primario" type="submit">Importar duas vezes</button></p></form>
+
+{% if demo %}
+<div class="tabela"><table>
+  <tr><th>Processo</th><th>Esperado</th><th>Sem UNIQUE: 1ª</th><th>Sem UNIQUE: 2ª</th><th>Com UNIQUE: 1ª</th><th>Com UNIQUE: 2ª</th></tr>
+  {% for l in linhas %}
+  <tr><td><code>{{ l.processo }}</code></td><td>{{ l.esperado|moeda }}</td>
+      <td>{{ l.sem1|moeda }}</td><td><b>{{ l.sem2|moeda }}</b></td><td>{{ l.com1|moeda }}</td><td><b>{{ l.com2|moeda }}</b></td></tr>
+  {% endfor %}
+</table></div>
+<p>Sem UNIQUE, a segunda importação dobra o total. Com UNIQUE, o total não muda.</p>
+{% endif %}
+{% endblock %}

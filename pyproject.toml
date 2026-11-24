@@ -17,3 +17,4 @@ pythonpath = ["src", "web"]
 DJANGO_SETTINGS_MODULE = "config.settings"
 testpaths = ["tests"]
 addopts = "-q"
+filterwarnings = ["ignore:No directory at:UserWarning"]

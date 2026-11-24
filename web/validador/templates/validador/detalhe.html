@@ -1,0 +1,61 @@
+{% extends "validador/base.html" %}
+{% load formato %}
+{% block nav %}{% include "validador/_nav_analise.html" %}{% endblock %}
+{% block conteudo %}
+<h1>Análise #{{ analise.id }}</h1>
+
+<div class="cartoes">
+  <div class="cartao">Analisados<b>{{ contagens.analisados }}</b></div>
+  <div class="cartao">Válidos<b>{{ contagens.validos }}</b></div>
+  <div class="cartao">Corrigidos<b>{{ contagens.corrigidos }}</b></div>
+  <div class="cartao">Duplicados<b>{{ contagens.duplicados }}</b></div>
+  <div class="cartao">Descartados<b>{{ contagens.descartados }}</b></div>
+  <div class="cartao">Pendentes<b>{{ contagens.pendentes }}</b></div>
+</div>
+<p class="info">Contagens de pagamentos.json, já considerando as decisões humanas.</p>
+
+<h2>Gerar lote</h2>
+<form method="post" action="{% url 'gerar_lote' analise.id %}">{% csrf_token %}
+  {% if bloqueios %}
+  <button class="primario" id="gerar-lote" disabled title="Resolva as pendências primeiro">Gerar lote</button>
+  <div class="aviso"><b>Bloqueado por {{ bloqueios|length }} registro(s):</b>
+    <ul>{% for b in bloqueios %}<li><code>{{ b.registro_id }}</code> [{{ b.regras|join:", " }}]: {{ b.motivo }}</li>{% endfor %}</ul>
+    <a href="{% url 'pendencias' analise.id %}">Resolver pendências</a>
+  </div>
+  {% else %}
+  <button class="primario" id="gerar-lote" type="submit">Gerar lote</button>
+  {% endif %}
+</form>
+{% for l in lotes %}<p class="info">Lote gerado em {{ l.gerado_em }} por {{ l.gerado_por }}: {{ l.eventos }} eventos, {{ l.novos }} novos.</p>{% endfor %}
+
+<h2>Totais pagos por processo</h2>
+<p class="info"><b>Antes</b>: simulação do comportamento inferido (o script original não foi fornecido): soma de todo valor numérico pelo processo exatamente como escrito, sem olhar tipo nem evento_id. <b>Depois</b>: eventos OK/CORRIGIDO e pendências aprovadas; estorno com sinal negativo.</p>
+<div class="tabela"><table>
+  <tr><th>Processo</th><th>Antes (simulação)</th><th>Depois</th></tr>
+  {% for t in totais %}<tr><td><code>{{ t.processo }}</code></td><td>{{ t.antes|moeda }}</td><td>{{ t.depois|moeda }}</td></tr>{% endfor %}
+</table></div>
+
+<h2>Resultado por registro</h2>
+<form method="get">Filtrar:
+  <select name="status" onchange="this.form.submit()">
+    <option value="">Todos</option>
+    {% for s in status_opcoes %}<option value="{{ s }}" {% if s == filtro %}selected{% endif %}>{{ s }}</option>{% endfor %}
+  </select>
+</form>
+<div class="tabela"><table>
+  <tr><th>Registro</th><th>Chave</th><th>Status</th><th>Regra</th><th>Motivo</th><th>Antes</th><th>Depois</th><th>Evidência</th></tr>
+  {% for l in linhas %}
+  <tr>
+    <td>{{ l.registro_id }}</td>
+    <td><code>{{ l.chave|default:"(vazio)" }}</code></td>
+    <td><span class="status {{ l.status }}">{{ l.status }}</span></td>
+    <td>{% for o in l.relevantes %}<code>{{ o.regra }}</code><br>{% empty %}—{% endfor %}</td>
+    <td>{% for o in l.relevantes %}{{ o.motivo }}<br>{% empty %}—{% endfor %}
+      {% if l.resolucao %}<br><b>Decisão humana:</b> {{ l.resolucao.acao }} por {{ l.resolucao.usuario }}: “{{ l.resolucao.justificativa }}”{% endif %}</td>
+    <td>{% for o in l.relevantes %}{{ o.antes }}<br>{% endfor %}</td>
+    <td>{% for o in l.relevantes %}{{ o.depois }}<br>{% endfor %}</td>
+    <td class="info">{% for k, v in l.evidencia.items %}{{ k }}={{ v }}<br>{% endfor %}</td>
+  </tr>
+  {% empty %}<tr><td colspan="8">Nenhum registro com esse status.</td></tr>{% endfor %}
+</table></div>
+{% endblock %}
