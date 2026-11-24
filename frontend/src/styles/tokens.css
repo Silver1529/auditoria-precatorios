@@ -1,0 +1,49 @@
+/* Tokens: o tema escuro troca só estes valores. */
+:root {
+  --fonte: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, sans-serif;
+  --fonte-mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+
+  --fundo: #f5f6f8;
+  --superficie: #ffffff;
+  --superficie-2: #eef0f4;
+  --texto: #1b2230;
+  --texto-suave: #5a6475;
+  --borda: #d5dae2;
+  --foco: #2563eb;
+  --primaria: #1d4ed8;
+  --primaria-texto: #ffffff;
+
+  /* cores semânticas (texto escuro sobre fundo claro = contraste AA) */
+  --ok: #166534;        --ok-fundo: #dcfce7;
+  --corrigido: #1e40af; --corrigido-fundo: #dbeafe;
+  --descartado: #4b5563; --descartado-fundo: #e5e7eb;
+  --pendente: #9a3412;  --pendente-fundo: #ffedd5;
+  --atencao: #854d0e;   --atencao-fundo: #fef9c3;
+  --erro: #b91c1c;      --erro-fundo: #fee2e2;
+
+  --espaco-1: 4px; --espaco-2: 8px; --espaco-3: 12px; --espaco-4: 16px; --espaco-5: 24px; --espaco-6: 32px;
+  --raio: 8px; --raio-pequeno: 4px;
+  --sombra: 0 1px 2px rgb(0 0 0 / 6%), 0 2px 8px rgb(0 0 0 / 6%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo: #0f141b;
+    --superficie: #171e28;
+    --superficie-2: #212a36;
+    --texto: #e6eaf0;
+    --texto-suave: #a3adbd;
+    --borda: #2f3a48;
+    --foco: #60a5fa;
+    --primaria: #3b82f6;
+
+    --ok: #86efac;        --ok-fundo: #12321f;
+    --corrigido: #93c5fd; --corrigido-fundo: #172a4a;
+    --descartado: #cbd5e1; --descartado-fundo: #2a313b;
+    --pendente: #fdba74;  --pendente-fundo: #3b2414;
+    --atencao: #fde047;   --atencao-fundo: #3a3410;
+    --erro: #fca5a5;      --erro-fundo: #3f1a1a;
+
+    --sombra: 0 1px 2px rgb(0 0 0 / 40%);
+  }
+}
