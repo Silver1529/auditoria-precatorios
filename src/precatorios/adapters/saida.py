@@ -157,7 +157,7 @@ def gerar_relatorio(analise: Analise, bloqueios: list[Bloqueio], lote: Lote | No
     depois = analise.totais_depois()
     for processo in sorted(set(analise.totais_antes) | set(depois)):
         legivel = _processo_legivel(processo)
-        rotulo = legivel if legivel == processo else f"`{processo or '(vazio)'}` (= {legivel})"
+        rotulo = legivel if legivel == processo or not processo else f"`{processo}` (= {legivel})"
         partes.append(f"| {rotulo} | {_moeda(analise.totais_antes.get(processo))} "
                       f"| {_moeda(depois.get(processo))} |")
     partes.append("\n## Lote\n")
