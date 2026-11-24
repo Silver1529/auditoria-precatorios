@@ -1,0 +1,6 @@
+registro_id,chave,regra,campo,antes,depois,motivo
+arquivo:tribunal.csv,tribunal.csv,ARQ-FORA-DO-LEIAUTE,arquivo,cp1252 ';',"utf-8 ','",arquivo fora do leiaute documentado (encoding ou separador); convertido na leitura: documentado UTF-8 com vírgula; recebido cp1252 com ';'
+pagamentos.json#2,ev-002,PAG-VALOR-TEXTO,valor,"2.500,50",2500.50,valor veio como texto em vez de número
+pagamentos.json#2,ev-002,PAG-DATA-FORMATO,data_pagamento,10/04/2025,2025-04-10,data em dd/mm/aaaa em vez de AAAA-MM-DD: confirmado por atualizado_em
+pagamentos.json#6,ev-005,PAG-PROCESSO-SEM-MASCARA,processo,00234562120208260053,0023456-21.2020.8.26.0053,processo sem a máscara CNJ; normalizado para o mesmo número
+prazo:0012345-10.2019.8.26.0053,0012345-10.2019.8.26.0053,PRZ-PRAZO-HUB-DIVERGENTE,prazo_pagamento,2027-12-31,2026-12-31,prazo do hub diferente do calculado pela regra do 2 de abril: apresentado em 2025-04-02

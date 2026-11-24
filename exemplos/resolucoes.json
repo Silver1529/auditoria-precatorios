@@ -1,0 +1,14 @@
+[
+  {"registro_id": "pagamentos.json#1", "acao": "REJEITAR", "usuario": "exemplo", "justificativa": "Exemplo: tribunal informou que vale a versão de 11/03 (15.500,00)"},
+  {"registro_id": "pagamentos.json#9", "acao": "APROVAR", "usuario": "exemplo", "justificativa": "Exemplo: versão confirmada pelo tribunal"},
+  {"registro_id": "pagamentos.json#5", "acao": "REJEITAR", "usuario": "exemplo", "justificativa": "Exemplo: valor nulo, aguardando reenvio"},
+  {"registro_id": "pagamentos.json#8", "acao": "APROVAR", "usuario": "exemplo", "justificativa": "Exemplo: tribunal confirmou que o estorno anula o ev-006"},
+  {"registro_id": "pagamentos.json#11", "acao": "REJEITAR", "usuario": "exemplo", "justificativa": "Exemplo: valor negativo, aguardando reclassificação"},
+  {"registro_id": "pagamentos.json#12", "acao": "REJEITAR", "usuario": "exemplo", "justificativa": "Exemplo: processo vazio, aguardando reenvio"},
+  {"registro_id": "pagamentos.json#13", "acao": "APROVAR", "usuario": "exemplo", "justificativa": "Exemplo: precatório 0067890 será cadastrado"},
+  {"registro_id": "precatorio:0023456-21.2020.8.26.0053", "acao": "APROVAR", "usuario": "exemplo", "justificativa": "Exemplo: valor de face conferido"},
+  {"registro_id": "precatorio:0045678-43.2021.5.02.0011", "acao": "APROVAR", "usuario": "exemplo", "justificativa": "Exemplo: ente conferido"},
+  {"registro_id": "precatorio:0056789-54.2017.4.03.6100", "acao": "APROVAR", "usuario": "exemplo", "justificativa": "Exemplo: tribunal confirmou o precatório"},
+  {"registro_id": "precatorio:0067890-65.2016.8.26.0053", "acao": "APROVAR", "usuario": "exemplo", "justificativa": "Exemplo: será cadastrado no sistema"},
+  {"registro_id": "prazo:0056789-54.2017.4.03.6100", "acao": "APROVAR", "usuario": "exemplo", "justificativa": "Exemplo: tribunal confirmou o horário de Brasília"}
+]

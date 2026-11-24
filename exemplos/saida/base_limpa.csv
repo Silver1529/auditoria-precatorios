@@ -1,0 +1,6 @@
+evento_id,processo,valor,pago_em,tipo,registro_id,status
+ev-002,0012345-10.2019.8.26.0053,2500.50,2025-04-10,pagamento,pagamentos.json#2,CORRIGIDO
+ev-003,0023456-21.2020.8.26.0053,8000.00,2025-05-02,pagamento,pagamentos.json#3,OK
+ev-005,0023456-21.2020.8.26.0053,1200.00,2025-06-01,pagamento,pagamentos.json#6,CORRIGIDO
+ev-006,0034567-32.2018.8.26.0405,5000.00,2025-02-20,pagamento,pagamentos.json#7,OK
+ev-008,0045678-43.2021.5.02.0011,3000.00,2025-07-15,pagamento,pagamentos.json#10,OK

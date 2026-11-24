@@ -1,0 +1,2 @@
+registro_id,chave,regras,motivo,resolucao,justificativa,usuario
+pagamentos.json#4,ev-002,PAG-DUPLICATA-EXATA,duplicata exata de um registro anterior (todos os campos iguais): igual ao registro pagamentos.json#2; duplicata exata contada uma vez,,,

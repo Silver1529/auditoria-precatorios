@@ -1,0 +1,13 @@
+registro_id,chave,regras,motivo,resolucao,justificativa,usuario
+pagamentos.json#1,ev-001,PAG-VERSAO-CONFLITANTE,mesmo evento_id com conteúdos diferentes; a regra de versão não está documentada: 2 versões (valor=15000.0 atualizado_em=2025-03-10T10:00:00-03:00; valor=15500.0 atualizado_em=2025-03-11T09:00:00-03:00),,,
+pagamentos.json#5,ev-004,PAG-VALOR-AUSENTE,valor nulo (o banco exige NOT NULL),,,
+pagamentos.json#8,ev-007,PAG-ESTORNO,estorno não documentado (a doc diz que o tipo é sempre 'pagamento'): não há campo que indique qual pagamento é estornado,,,
+pagamentos.json#9,ev-001,PAG-VERSAO-CONFLITANTE,mesmo evento_id com conteúdos diferentes; a regra de versão não está documentada: 2 versões (valor=15000.0 atualizado_em=2025-03-10T10:00:00-03:00; valor=15500.0 atualizado_em=2025-03-11T09:00:00-03:00),,,
+pagamentos.json#11,ev-009,PAG-VALOR-NAO-POSITIVO,valor menor ou igual a zero (o banco exige valor > 0); pode ser estorno mal classificado: -200.00,,,
+pagamentos.json#12,ev-010,PAG-PROCESSO-VAZIO,processo vazio; não há como ligar ao precatório,,,
+pagamentos.json#13,ev-011,PAG-PROCESSO-DESCONHECIDO,processo não cadastrado no hub; o pagamento não tem precatório para ser ligado: 0067890-65.2016.8.26.0053,,,
+precatorio:0023456-21.2020.8.26.0053,0023456-21.2020.8.26.0053,TH-VALOR-FACE-DIVERGENTE,"valor de face diferente entre tribunal e hub: antes = tribunal, depois = hub",,,
+precatorio:0045678-43.2021.5.02.0011,0045678-43.2021.5.02.0011,TH-ENTE-DIVERGENTE,"ente devedor diferente entre tribunal e hub: antes = tribunal, depois = hub",,,
+precatorio:0056789-54.2017.4.03.6100,0056789-54.2017.4.03.6100,TH-AUSENTE-TRIBUNAL,precatório está no hub e não está no tribunal,,,
+precatorio:0067890-65.2016.8.26.0053,0067890-65.2016.8.26.0053,TH-AUSENTE-HUB,precatório está no tribunal e não está no hub,,,
+prazo:0056789-54.2017.4.03.6100,0056789-54.2017.4.03.6100,PRZ-FUSO-INDEFINIDO,a data de apresentação muda de dia conforme o fuso e isso altera o prazo: 2025-04-03T01:00:00Z dá 2026-12-31 ou 2027-12-31,,,
