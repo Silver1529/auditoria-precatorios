@@ -21,7 +21,7 @@ def test_justificativa_e_obrigatoria(analise, relogio, justificativa):
 
 
 def test_resolucao_fica_registrada_e_em_log(analise, relogio, caplog):
-    with caplog.at_level(logging.INFO):
+    with caplog.at_level(logging.DEBUG, logger="precatorios"):
         nova = resolver_pendencia(
             analise, "pagamentos.json#8", Acao.REJEITAR, "Tribunal confirmou estorno indevido", "ana", relogio
         )
