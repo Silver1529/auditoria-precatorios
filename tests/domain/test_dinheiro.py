@@ -50,3 +50,9 @@ def test_ponto_com_tres_casas_e_ambiguo():
 def test_valor_invalido(bruto):
     with pytest.raises(ValorInvalido):
         ler_valor(bruto)
+
+
+def test_formatar_em_reais():
+    from precatorios.domain.dinheiro import formatar_brl
+    assert formatar_brl(Decimal("15500.00")) == "R$ 15.500,00"
+    assert formatar_brl(Decimal("-200.00")) == "-R$ 200,00"

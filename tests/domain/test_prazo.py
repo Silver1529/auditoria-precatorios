@@ -37,3 +37,16 @@ def test_utc_que_nao_muda_o_prazo_nao_e_ambiguo():
     resultado = prazo_da_apresentacao(ler_apresentacao("2025-06-10T01:00:00Z"))
     assert not resultado.ambiguo
     assert resultado.prazo == date(2027, 12, 31)
+
+
+# --- situação do prazo para a tela (limite de alerta é regra, não fica no front) ----------
+from precatorios.domain.prazo import LIMITE_ALERTA_DIAS, situacao_prazo  # noqa: E402
+
+
+def test_situacao_do_prazo():
+    prazo = date(2025, 12, 31)
+    assert LIMITE_ALERTA_DIAS == 60
+    assert situacao_prazo(prazo, date(2026, 1, 1)) == "vencido"
+    assert situacao_prazo(prazo, date(2025, 12, 31)) == "atencao"  # vence hoje
+    assert situacao_prazo(prazo, date(2025, 11, 1)) == "atencao"   # 60 dias
+    assert situacao_prazo(prazo, date(2025, 10, 31)) == "no_prazo"  # 61 dias
