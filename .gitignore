@@ -10,3 +10,5 @@ saida/
 *.sqlite3
 .env
 staticfiles/
+
+node_modules/

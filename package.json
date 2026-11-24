@@ -1,0 +1,18 @@
+{
+  "name": "auditoria-precatorios",
+  "private": true,
+  "description": "Comandos do projeto inteiro (Python + front). Rode a partir da raiz do repositório.",
+  "scripts": {
+    "setup": "python3 -m venv .venv && .venv/bin/pip install -q -r requirements-dev.txt && .venv/bin/pip install -q -e . && yarn --cwd frontend install --frozen-lockfile && yarn --cwd frontend playwright install chromium && cd web && ../.venv/bin/python manage.py migrate -v0",
+    "dev": "concurrently -k -n django,vite -c blue,magenta \"cd web && ../.venv/bin/python manage.py migrate -v0 && ../.venv/bin/python manage.py runserver 8000\" \"yarn --cwd frontend dev\"",
+    "test": "yarn run test:py && yarn --cwd frontend lint && yarn --cwd frontend test && yarn --cwd frontend e2e",
+    "check": "yarn test",
+    "test:py": ".venv/bin/pytest",
+    "build": "yarn --cwd frontend build",
+    "e2e": "yarn --cwd frontend e2e",
+    "docker": "docker compose up --build"
+  },
+  "devDependencies": {
+    "concurrently": "9.1.0"
+  }
+}
