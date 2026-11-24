@@ -6,8 +6,8 @@ const FIXTURES = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../
 
 test('do upload ao envio liberado', async ({ page }) => {
   await page.goto('/')
-  await page.getByLabel('Usuário').fill('e2e')
-  await page.getByLabel('Senha').fill('e2e-senha-123')
+  await page.getByLabel('Usuário').fill(process.env.E2E_USUARIO ?? 'e2e')
+  await page.getByLabel('Senha').fill(process.env.E2E_SENHA ?? 'e2e-senha-123')
   await page.getByRole('button', { name: 'Entrar' }).click()
 
   for (const campo of ['pagamentos', 'tribunal', 'hub', 'apresentacoes']) {

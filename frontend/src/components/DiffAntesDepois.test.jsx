@@ -8,6 +8,12 @@ describe('DiffAntesDepois', () => {
     expect(screen.getByText('2500.50').tagName).toBe('INS')
   })
 
+  it('valor só recebido (sem correção) não aparece riscado', () => {
+    render(<DiffAntesDepois antes="null" depois="" />)
+    expect(screen.getByText('null').tagName).not.toBe('DEL')
+    expect(screen.getByText(/valor recebido/)).toBeInTheDocument()
+  })
+
   it('não mostra nada quando não há mudança', () => {
     const { container } = render(<DiffAntesDepois antes="" depois="" />)
     expect(container).toBeEmptyDOMElement()

@@ -1,0 +1,35 @@
+# "Mini produção" local: Postgres + a mesma imagem que vai para o Render.
+# Acesse http://localhost:8080 (usuário demo / senha demo-senha-123).
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: precatorios
+      POSTGRES_USER: precatorios
+      POSTGRES_PASSWORD: precatorios
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U precatorios -d precatorios"]
+      interval: 2s
+      retries: 20
+    volumes:
+      - dados-postgres:/var/lib/postgresql/data
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://precatorios:precatorios@db:5432/precatorios
+      SECRET_KEY: somente-local-nao-usar-em-producao
+      DEBUG: "0"
+      HTTPS: "0"
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      PORT: "8000"
+      DJANGO_SUPERUSER_USERNAME: demo
+      DJANGO_SUPERUSER_PASSWORD: demo-senha-123
+    ports:
+      - "8080:8000"
+
+volumes:
+  dados-postgres:

@@ -1,0 +1,28 @@
+# Blueprint do Render: um Web Service (Docker) + um Postgres gratuito.
+# Demonstração com dados fictícios. O Postgres gratuito expira 30 dias após a criação.
+services:
+  - type: web
+    name: validador-precatorios
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /saude
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: validador-precatorios-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "0"
+      - key: WEB_CONCURRENCY
+        value: "2"
+      - key: DJANGO_SUPERUSER_USERNAME
+        sync: false
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false
+
+databases:
+  - name: validador-precatorios-db
+    plan: free

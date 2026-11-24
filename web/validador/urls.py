@@ -1,8 +1,9 @@
 from django.urls import path
 
-from validador import api
+from validador import api, front
 
 urlpatterns = [
+    path("", front.index),
     path("api/login", api.entrar),
     path("api/logout", api.sair),
     path("api/me", api.me),

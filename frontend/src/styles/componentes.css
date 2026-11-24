@@ -22,7 +22,7 @@
 
 .card-contagem { display: grid; gap: var(--espaco-1); padding: var(--espaco-3) var(--espaco-4); border-radius: var(--raio);
   background: var(--superficie); border: 1px solid var(--borda); border-left-width: 5px; }
-.card-contagem__titulo { color: var(--texto-suave); font-size: .9rem; }
+.card-contagem__titulo { color: var(--texto-suave); font-size: .9rem; white-space: nowrap; }
 .card-contagem__valor { font-size: 1.9rem; font-variant-numeric: tabular-nums; line-height: 1.1; }
 .card-contagem__descricao { font-size: .8rem; color: var(--texto-suave); }
 .card-contagem--ok { border-left-color: var(--ok); }
@@ -74,6 +74,7 @@
 .tabela th.num, .tabela td.num { text-align: right; }
 .tabela thead th { background: var(--superficie-2); position: sticky; top: 0; }
 .tabela--interna { margin-top: var(--espaco-3); background: var(--superficie); }
+.tabela td > code, .tabela td > button { white-space: nowrap; } /* número de processo não quebra; a tabela rola */
 .tabela caption { text-align: left; font-weight: 700; padding: var(--espaco-2) 0; }
 .linha--pendente { background: color-mix(in srgb, var(--pendente-fundo) 45%, transparent); }
 .linha--descartado { color: var(--texto-suave); }
@@ -91,6 +92,8 @@
 .diff del { color: var(--erro); background: var(--erro-fundo); text-decoration-thickness: 1px; padding: 0 var(--espaco-1); border-radius: var(--raio-pequeno); opacity: .85; }
 .diff ins { color: var(--ok); background: var(--ok-fundo); text-decoration: none; font-weight: 700; padding: 0 var(--espaco-1); border-radius: var(--raio-pequeno); }
 .diff__seta { color: var(--texto-suave); }
+.diff--recebido code { background: var(--superficie-2); padding: 0 var(--espaco-1); border-radius: var(--raio-pequeno); }
+.diff--recebido::before { content: "recebido: "; color: var(--texto-suave); font-size: .8rem; }
 
 /* ---- estados ---- */
 .estado { display: grid; justify-items: center; gap: var(--espaco-2); padding: var(--espaco-6) var(--espaco-4); text-align: center; color: var(--texto-suave); }
@@ -137,7 +140,9 @@
 /* ---- conferência ---- */
 .conferencia__topo { display: flex; justify-content: space-between; gap: var(--espaco-2); align-items: center; margin-bottom: var(--espaco-2); }
 .conferencia--divergente { border-left: 5px solid var(--pendente); }
-.tabela--lado-a-lado th[scope="row"] { width: 34%; font-weight: 600; }
+.tabela--lado-a-lado { table-layout: fixed; }
+.tabela--lado-a-lado th, .tabela--lado-a-lado td { overflow-wrap: anywhere; }
+.tabela--lado-a-lado th[scope="row"] { width: 30%; font-weight: 600; }
 .campo--divergente th, .campo--divergente td { background: var(--atencao-fundo); }
 .campo--divergente td { font-weight: 700; }
 .selo-divergente { display: block; font-size: .75rem; color: var(--erro); font-weight: 700; }
