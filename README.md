@@ -4,6 +4,10 @@ Diagnóstico e limpeza dos dados de pagamentos de precatórios recebidos do trib
 vieram, classifica cada registro em **OK, CORRIGIDO, DESCARTADO ou PENDENTE** com regra, motivo e evidência, e só
 libera o lote para importação quando não há pendência nem erro.
 
+**Demonstração online:** <https://validador-precatorios.onrender.com>. Entre com qualquer nome e senha (modo
+demonstração, dados fictícios). No plano gratuito do Render o serviço dorme sem acesso: o primeiro carregamento pode
+levar cerca de 1 minuto. Para testar, envie os quatro arquivos de [`tests/fixtures/`](tests/fixtures/).
+
 - **Diagnóstico, prevenção e dúvidas** (um arquivo, três partes): [DIAGNOSTICO.md](DIAGNOSTICO.md)
 - Exemplos de saída da limpeza (relatório, CSVs, lote): [exemplos/](exemplos/)
 - Fluxo operacional analisado: [docs/FLUXO_OPERACIONAL.md](docs/FLUXO_OPERACIONAL.md)

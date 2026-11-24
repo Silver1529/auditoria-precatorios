@@ -32,7 +32,7 @@ mesmo domínio, mais um Postgres gratuito.
    - `DJANGO_SUPERUSER_USERNAME`: o usuário para entrar na tela (ex.: `demo`);
    - `DJANGO_SUPERUSER_PASSWORD`: uma senha forte. Anote.
 5. Clique em **Apply**. O primeiro deploy leva alguns minutos (build do front + imagem Python).
-6. Quando o status ficar **Live**, abra a URL `https://validador-precatorios-xxxx.onrender.com`. No modo
+6. Quando o status ficar **Live**, abra a URL (a desta demonstração é <https://validador-precatorios.onrender.com>). No modo
    demonstração, qualquer nome e senha entram; o usuário do passo 4 é o administrador (`/admin`).
 
 ## Variáveis de ambiente
